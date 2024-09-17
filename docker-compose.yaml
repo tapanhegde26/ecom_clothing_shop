@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: mysql_db
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: ecommerce
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "3306:3306"
+    networks:
+      - ecommerce-network
+
+  backend:
+    build: ./back-end  # Directory where your Dockerfile and app.py reside
+    container_name: flask_backend
+    ports:
+      - "5000:5000"
+    environment:
+      - MYSQL_HOST=db
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=password
+      - MYSQL_DB=ecommerce
+    depends_on:
+      - db
+    networks:
+      - ecommerce-network
+
+  react_frontend:
+    build:
+      context: ./front-end
+    container_name: react_frontend
+    ports:
+      - "3000:5000"
+    depends_on:
+      - backend
+    networks:
+      - ecommerce-network
+
+networks:
+  ecommerce-network:
+    driver: bridge
+
+volumes:
+  mysql_data:
+
