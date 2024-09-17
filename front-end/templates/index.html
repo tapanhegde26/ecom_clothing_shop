@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/styles.css">
+    <title>Clothing Shop</title>
+</head>
+<body>
+    <h1>Welcome to the Clothing Shop</h1>
+    <div class="products">
+        {% for product in products %}
+            <div class="product">
+                <h2>{{ product['name'] }}</h2>
+                <img src="{{ product['image_url'] }}" alt="{{ product['name'] }}">
+                <p>Price: ${{ product['price'] }}</p>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
+
